@@ -1,0 +1,425 @@
+:root{  
+  --bg:#001F3F;  
+  --panel:#06304A;  
+  --gold:#FFD700;  
+  --luffy:#D72638;  
+  --accent:#FFA500;  
+  --muted:#cfe7ff;  
+  --card:#072336;  
+  --glass: rgba(255,255,255,0.03);  
+  --transition: 0.4s cubic-bezier(.25,.8,.25,1);  
+}  
+
+/* Reset básico */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;-webkit-font-smoothing:antialiased}
+
+/* Body com fundo (mantido do seu original) */
+body {
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url('assets/fundo.jpg') no-repeat center center / cover;
+  color: var(--muted);
+  display: flex; /* Adicionado para centralizar o painel de acesso */
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  min-height: 100vh; /* Ocupa a altura total da viewport */
+  width: 100vw;
+  padding: 0;
+}
+
+/* Wrapper para centralizar o formulário no centro da tela */
+.main-content-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* Estilo do painel de acesso (usando --card e --glass) */
+.access-panel {
+    background: var(--card);
+    border: 1px solid var(--glass);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    max-width: 100%;
+    backdrop-filter: blur(8px); /* Blur mais forte na caixa para destaque */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.form-title {
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.6em;
+    font-weight: 800;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--muted);
+    font-size: 0.95em;
+    opacity: 0.9;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--panel);
+    color: var(--muted);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+    outline: none;
+    background-color: #083b4e;
+}
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-top: 15px;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: var(--transition);
+}
+
+.btn-register {
+    background-color: var(--luffy); /* Vermelho/Luffy para Registro */
+}
+
+.btn-register:hover {
+    background-color: #a81c2d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(215, 38, 56, 0.4);
+}
+
+.btn-login {
+    background-color: var(--gold); /* Ouro para Login */
+    color: var(--card); /* Texto escuro no botão claro */
+}
+
+.btn-login:hover {
+    background-color: #e6c200;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+}
+
+.switch-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: var(--muted);
+    opacity: 0.7;
+}
+
+.switch-link a, .forgot-password a {
+    color: var(--accent); /* Laranja/Accent para links */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+.switch-link a:hover, .forgot-password a:hover {
+    color: var(--gold);
+    text-decoration: underline;
+}
+
+.forgot-password {
+    text-align: right;
+    margin-top: 5px;
+}
+.forgot-password a {
+    font-size: 0.85em;
+    opacity: 0.8;
+}
+
+.error {
+    color: var(--luffy); /* Vermelho/Luffy para mensagens de erro */
+    font-size: 0.8em;
+    margin-top: 5px;
+    display: none;
+    font-weight: 500;
+}
+
+/* Estilos para a imagem (trecho que você queria adicionar) */
+.image-area {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Separador sutil */
+}
+
+.logo-footer {
+    max-width: 120px; /* Define um tamanho máximo razoável */
+    height: auto;
+    opacity: 0.6; /* Deixa o logo mais sutil no footer */
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2)); /* Brilho sutil dourado */
+    transition: var(--transition);
+}
+
+.logo-footer:hover {
+    opacity: 1;
+}
+
+/* --- SEU CSS ORIGINAL ABAIXO --- */
+
+.container{
+  max-width:100%;
+  margin:0 auto;
+  padding:3vw 4vw 8vh;
+  min-height:90vh;
+  display:flex;
+  flex-direction:column;
+  /* backdrop-filter: blur(2px); COMENTADO POIS USAMOS blur(8px) no .access-panel */
+}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:2.5vh;
+}
+.logo{
+  font-weight:900;
+  color:var(--gold);
+  font-size:5vw;
+  letter-spacing:1px;
+  text-shadow:0 2px 12px rgba(0,0,0,0.7);
+}
+.subtitle{
+  font-size:3vw;
+  color:var(--muted);
+  opacity:0.85;
+}
+.status{
+  font-size:3vw;
+  text-align:right;
+  transition:var(--transition);
+}
+.status span{
+  display:inline-block;
+  margin-left:6px;
+  color:#fff;
+  transition:transform 0.3s ease;
+}
+
+/* Balance Scale */
+.balance-scale-wrapper{
+  position: relative;
+  height: 20px;
+  border-radius: 10px;
+  background: #444;
+  overflow: hidden;
+  margin:1vw 0;
+}
+.balance-scale,
+.balance-scale-red{
+  position: absolute;
+  top:0;
+  height:100%;
+  transition: width 0.35s ease-out, background 0.3s ease;
+}
+.balance-scale{ left:0; width:50%; background:#4CAF50;}
+.balance-scale-red{ right:0; width:50%; background:#F44336;}
+.balance-scale-text{
+  position:absolute;
+  width:100%;
+  text-align:center;
+  color:#fff;
+  font-size:0.5rem;
+  font-weight:bold;
+  top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;
+}
+
+/* Content principal */
+.content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:2vh;
+}
+
+/* Payout cards */
+.payouts{
+  display:flex;
+  gap:2vw;
+  flex-wrap:wrap;
+  justify-content:justify-content;
+}
+.payout-card{
+  background:linear-gradient(180deg,var(--panel),var(--card));
+  border-radius:8px;
+  padding:8px 10px;
+  width:25%;
+  min-width:100px;
+  display:flex;
+  flex-direction:column;
+  align-items:justify-content;
+  gap:3px;
+  border:1px solid rgba(255,215,0,0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+  font-size:0.85rem;
+  min-height:40px;
+}
+.payout-card:hover{
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:0 10px 20px rgba(255,215,0,0.35);
+}
+.payout-card i{
+  font-size:8vw;
+  color:var(--gold);
+  transition: transform 0.6s var(--transition), color 0.4s var(--transition);
+}
+.payout-card .mult{font-weight:900;color:#fff;}
+.payout-card .value{font-size:2vw;color:var(--muted);}
+
+/* Slot machine */
+.slot-wrapper{display:flex;justify-content:center;}
+.machine{
+  width:100%;
+  max-width:820px;
+  border-radius:14px;
+  padding:2vw;
+  background:linear-gradient(180deg,#08283b,#061a2b);
+  box-shadow:0 22px 60px rgba(0,0,0,0.7);
+  border:6px solid rgba(255,255,255,0.02);
+  transition: transform 0.2s ease;
+}
+.machine:active{transform:scale(0.985);}
+.reels{display:flex;gap:1.2vw;position:relative;padding:1vw;}
+.reel{
+  flex:1;
+  min-width:0;
+  background:linear-gradient(180deg,#0b3b52,#062731);
+  border-radius:10px;
+  padding:1vw;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  border-left:4px solid rgba(255,255,255,0.02);
+  border-right:4px solid rgba(255,255,255,0.02);
+  height:30vw;
+  max-height:280px;
+  overflow:hidden;
+  transition: transform 0.3s ease;
+}
+.cell{
+  width:100%;
+  height:33.333%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.cell i{
+  font-size:7vw;
+  max-font-size:56px;
+  color:var(--gold);
+  transition: transform 0.5s cubic-bezier(.2,.9,.2,1), opacity 0.4s, filter 0.4s, color 0.4s;
+  transform-origin:center center;
+}
+.cell.win i{
+  transform: scale(1.25) rotate(-8deg);
+  filter:drop-shadow(0 10px 22px rgba(255,180,30,0.8));
+  color:#fff;
+  animation: pulse 0.6s infinite alternate;
+}
+
+/* Highlight canvas */
+.hl-canvas, .hl-wrapper{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+/* Info row e controles */
+.info-row{display:flex;gap:3vw;align-items:center;justify-content:space-between;margin-top:1.5vh;flex-wrap:wrap;}
+.controls-card{display:flex;gap:3vw;align-items:center;}
+.bet-controls{
+  display:flex;
+  align-items:center;
+  gap:1vw;
+  background:var(--panel);
+  padding:0.6vw;
+  border-radius:8px;
+  transition: transform 0.2s ease;
+}
+.bet-controls:hover{transform:scale(1.03);}
+.tiny{
+  padding:0.5vw 1vw;
+  border-radius:6px;
+  border:none;
+  background:var(--luffy);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  transition: transform 0.15s ease, box-shadow 0.25s ease;
+}
+.tiny:active{transform:scale(0.95);box-shadow:0 4px 12px rgba(0,0,0,0.25);}
+.tiny:disabled{opacity:0.5;cursor:not-allowed;filter:brightness(0.85);}
+
+.bet-value{
+  min-width:10vw;
+  text-align:center;
+  font-weight:800;
+  font-size:3.4vw;
+  transition: transform 0.3s ease;
+}
+
+/* Volatility */
+.volatility select{
+  padding:1vw;
+  border-radius:6px;
+  border:none;
+  background:#083b4e;
+  color:#fff;
+  cursor:pointer;
+  transition: transform 0.2s ease;
+}
+.volatility select:hover{transform:scale(1.05);}
+
+/* Meta card */
+.meta-card{
+  background:var(--panel);
+  padding:1vw;
+  border-radius:8px;
+  min-width:40vw;
+  display:flex;
+  flex-direction:column;
+  gap:0.5vw;
+  transition: transform 0.25s ease;
+}
+.meta-card:hover{transform:scale(1.02);}
+#lastResult{font-weight:700;}
+.small{
+  padding:0.5vw 0.8vw;
+  border-radius:6px;
+  cursor:pointer;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+.small:active{transform:scale(0.95);box-shadow:0 4px 12px rgba(0,0,0,0.25);}
+
+/* Footer
+
