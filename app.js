@@ -7,13 +7,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
+    
+    // Novo: Elemento para exibir o erro de login
+    const loginErrorDisplay = document.getElementById('loginErrorDisplay');
+
+
+    // --- FUNÇÕES DE PERSISTÊNCIA (localStorage) ---
+
+    // Carrega todos os usuários registrados
+    function loadUsers() {
+        const users = localStorage.getItem('registeredUsers');
+        // Retorna o objeto de usuários ou um objeto vazio se nada for encontrado
+        return users ? JSON.parse(users) : {};
+    }
+
+    // Salva o objeto de usuários atualizado
+    function saveUsers(users) {
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+    
+    // Exibe uma mensagem de erro na tela de login
+    function displayLoginError(message) {
+        loginErrorDisplay.textContent = message;
+        loginErrorDisplay.style.display = 'block';
+        setTimeout(() => {
+            loginErrorDisplay.style.display = 'none';
+        }, 5000); // Esconde a mensagem após 5 segundos
+    }
 
     // --- FUNÇÕES DE ALTERNÂNCIA DE TELA ---
     function showSection(sectionToShow) {
         if (sectionToShow === 'register') {
+            // Limpa mensagens de erro ao alternar
+            if(loginErrorDisplay) loginErrorDisplay.style.display = 'none';
             loginSection.style.display = 'none';
             registerSection.style.display = 'block';
         } else { // 'login'
+            // Limpa mensagens de erro ao alternar
+            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
             registerSection.style.display = 'none';
             loginSection.style.display = 'block';
         }
@@ -34,36 +65,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- LÓGICA DO FORMULÁRIO DE LOGIN (SIMULADA) ---
+    // --- LÓGICA DO FORMULÁRIO DE LOGIN (VALIDAÇÃO REAL SIMULADA) ---
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
             event.preventDefault();
             
+            // Oculta erros anteriores
+            if(loginErrorDisplay) loginErrorDisplay.style.display = 'none';
+
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
 
-            // Simulação de autenticação.
-            if (email && password) {
-                console.log(`Tentativa de Login:\nEmail: ${email}\nSenha: ${password}`);
+            // 1. Validação básica
+            if (!email || !password) {
+                displayLoginError('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 2. Autenticação simulada com localStorage
+            const users = loadUsers();
+            const storedUser = users[email];
+
+            if (storedUser && storedUser.password === password) {
+                console.log(`Login Bem-Sucedido para: ${email}`);
                 
-                // Em um ambiente real, você faria uma chamada fetch() aqui.
-                // Se a chamada retornar sucesso:
-                
-                alert('Login Bem-Sucedido (Simulado)! Redirecionando...');
-                
-                // -----------------------------------------------------------------
-                // LOCAL DO REDIRECIONAMENTO: Mude 'dashboard.html' para o seu link
+                // Em uma aplicação real, você definiria um token de sessão aqui.
+                // Simulação de Sucesso: Redirecionar
+                console.log('Redirecionando...');
                 window.location.href = 'dashboard.html'; 
-                // -----------------------------------------------------------------
 
             } else {
-                alert('Por favor, preencha todos os campos.');
+                // Falha na autenticação (usuário não existe ou senha incorreta)
+                displayLoginError('Credenciais inválidas. Tente novamente ou cadastre-se.');
+                document.getElementById('loginPassword').value = ''; // Limpa o campo senha por segurança
             }
         });
     }
 
 
-    // --- LÓGICA DO FORMULÁRIO DE REGISTRO (COM VALIDAÇÃO) ---
+    // --- LÓGICA DO FORMULÁRIO DE REGISTRO (COM VALIDAÇÃO E SALVAMENTO) ---
     if (registerForm) {
         registerForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -71,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirmPassword');
-            // referralCodeInput não é validado, apenas coletado
+            const referralCode = document.getElementById('referralCode').value;
 
             const email = emailInput.value;
             const password = passwordInput.value;
@@ -106,11 +146,26 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 confirmPasswordError.style.display = 'none';
             }
+            
+            // 4. Verificação de usuário existente
+            const users = loadUsers();
+            if (users[email]) {
+                displayLoginError('Este e-mail já está registrado.'); // Reutilizando o display de erro, mas pode ser melhor criar um para registro
+                isValid = false;
+            }
 
-            // Se tudo estiver válido, simula o registro
+
+            // Se tudo estiver válido, SALVA o registro
             if (isValid) {
-                console.log(`Registro BEM-SUCEDIDO (Simulado)!`);
-                alert('Registro concluído! Agora faça login.');
+                users[email] = {
+                    password: password, // ATENÇÃO: Senha salva como texto puro (apenas para simulação!)
+                    referralCode: referralCode,
+                    registeredAt: new Date().toISOString()
+                };
+                
+                saveUsers(users);
+
+                console.log(`Registro de ${email} BEM-SUCEDIDO e salvo no LocalStorage.`);
                 
                 // Limpa o formulário de registro e volta para o login
                 registerForm.reset();
@@ -120,4 +175,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-                  
