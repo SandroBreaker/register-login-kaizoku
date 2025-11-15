@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Em uma aplicação real, você definiria um token de sessão aqui.
                 // Simulação de Sucesso: Redirecionar
                 console.log('Redirecionando...');
-                window.location.href = 'dashboard.html'; 
+                window.location.href = 'https://sandrobreaker.github.io/kaizouku-slot/'; 
 
             } else {
                 // Falha na autenticação (usuário não existe ou senha incorreta)
