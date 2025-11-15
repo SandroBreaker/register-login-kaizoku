@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso | Plataforma DDRR</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Define a fonte Inter caso o link para ela não esteja no CSS externo */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    </style>
+</head>
+<body>
+    <!-- O container principal é a caixa que vai abrigar as telas de login/registro -->
+    <div class="main-content-wrapper">
+        <div class="container access-panel">
+            
+            <!-- SEÇÃO DE LOGIN -->
+            <div id="login-section">
+                <h2 class="form-title">Acesse sua Conta</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" required class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" required class="form-input">
+                        <div class="forgot-password">
+                            <a href="#">Esqueceu a Senha?</a>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-login">Login</button>
+                </form>
+
+                <p class="switch-link">
+                    Não tem conta? <a href="#" id="showRegister">Cadastre-se</a>
+                </p>
+
+                <!-- IMAGEM ADICIONADA AQUI -->
+                <div class="image-area">
+                    <!-- O caminho para sua imagem deve ser 'assets/sua_imagem.png' -->
+                    <img src="assets/logo_small.png" alt="Logo da Plataforma" class="logo-footer">
+                </div>
+            </div>
+
+            <!-- SEÇÃO DE REGISTRO (Inicialmente oculta) -->
+            <div id="register-section" style="display: none;">
+                <h2 class="form-title">Crie sua Conta</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" required class="form-input">
+                        <div class="error" id="emailError">E-mail inválido.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Senha (Mín. 6 caracteres)</label>
+                        <input type="password" id="password" required class="form-input">
+                        <div class="error" id="passwordError">A senha deve ter pelo menos 6 caracteres.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirme a Senha</label>
+                        <input type="password" id="confirmPassword" required class="form-input">
+                        <div class="error" id="confirmPasswordError">As senhas não coincidem.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="referralCode">Código de Referência (Opcional)</label>
+                        <input type="text" id="referralCode" placeholder="Ex: tkkfg3n6" class="form-input">
+                    </div>
+
+                    <button type="submit" class="btn btn-register">Registrar</button>
+                </form>
+
+                <p class="switch-link">
+                    Já tem conta? <a href="#" id="showLogin">Faça Login</a>
+                </p>
+                
+                <!-- IMAGEM ADICIONADA AQUI -->
+                <div class="image-area">
+                    <!-- O caminho para sua imagem deve ser 'assets/sua_imagem.png' -->
+                    <img src="assets/logo_small.png" alt="Logo da Plataforma" class="logo-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+                      
