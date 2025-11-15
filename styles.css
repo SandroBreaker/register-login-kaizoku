@@ -160,17 +160,18 @@ label {
 
 /* Estilos para a imagem (trecho que você queria adicionar) */
 .image-area {
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
     padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Separador sutil */
 }
 
 .logo-footer {
-    max-width: 120px; /* Define um tamanho máximo razoável */
+    width: 100%;
+    max-width: 90%;   /* ocupa quase todo espaço interno */
     height: auto;
-    opacity: 0.6; /* Deixa o logo mais sutil no footer */
-    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2)); /* Brilho sutil dourado */
+    opacity: 0.6;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2));
     transition: var(--transition);
 }
 
