@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma DDRR</title>
+    <link rel="stylesheet" href="home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header__user-info">
+            <img src="assets/luffy-icon.png" alt="Ícone" class="user-info__icon">
+            <span id="header-user-name" class="user-info__name">Nome do Player</span>
+        </div>
+        <div class="header__balance">
+            <span>Saldo: R$ <span id="current-balance">100.00</span></span>
+        </div>
+    </header>
+
+    <div class="screen-container">
+        
+        <main id="tela-inicio" class="screen active">
+            <section class="game-wallpaper">
+                <a href="https://sandrobreaker.github.io/kaizouku-slot/" class="btn-play">Jogar</a>
+            </section>
+        </main>
+
+        <main id="tela-bonus" class="screen hidden">
+            <h2>Bônus e Missões</h2>
+            <div class="mission-card">
+                <h3>Resgate R$ 10,00</h3>
+                <p>Compartilhe em algum grupo do Facebook e ganhe na hora.</p>
+                <button class="btn-secondary">Compartilhar</button>
+            </div>
+            </main>
+
+        <main id="tela-perfil" class="screen hidden">
+            <h2>Meu Perfil</h2>
+            <div class="profile-card">
+                <img src="assets/luffy-gear-5.png" alt="Foto Perfil" class="profile__pic">
+                <span id="profile-user-name" class="profile__name">Nome do Player</span>
+                <div class="profile__balances">
+                    <p>Saldo: R$ <span id="profile-balance">100.00</span></p>
+                    <p>Bônus: R$ <span id="profile-bonus">15.00</span></p>
+                </div>
+                <button id="btn-depositar" class="btn-primary">Depositar</button>
+            </div>
+        </main>
+
+    </div>
+
+    <footer class="main-footer">
+        <nav class="footer-nav">
+            <button id="nav-home" class="nav-item active">Home</button>
+            <button id="nav-bonus" class="nav-item">Bônus</button>
+            <button id="nav-perfil" class="nav-item">Perfil</button>
+        </nav>
+    </footer>
+
+    <div id="deposit-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close-btn">&times;</button>
+            <h3>Fazer um Depósito</h3>
+            
+            <div class="deposit-info">
+                <p>Valor a pagar:</p>
+                <h2 id="deposit-value-display">R$ 50.00</h2>
+                
+                <p>PIX QR Code:</p>
+                <img src="assets/qr-code-placeholder.png" alt="PIX QR Code" class="pix-qr-code">
+                
+                <p>PIX Copia e Cola:</p>
+                <input type="text" id="pix-code-string" value="00020126seucodigopixaqui..." readonly>
+                <button id="btn-copy-pix" class="btn-secondary">Copiar Código</button>
+            </div>
+
+            <p class="section-title">Ou escolha um valor:</p>
+            <div class="preset-amounts-grid">
+                <button class="preset-amount" data-value="20">R$ 20</button>
+                <button class="preset-amount" data-value="50">R$ 50</button>
+                <button class="preset-amount" data-value="100">R$ 100</button>
+                <button class="preset-amount" data-value="150">R$ 150</button>
+                <button class="preset-amount" data-value="200">R$ 200</button>
+                <button class="preset-amount" data-value="250">R$ 250</button>
+                <button class="preset-amount" data-value="300">R$ 300</button>
+                <button class="preset-amount" data-value="350">R$ 350</button>
+            </div>
+
+            <p class="section-title">Defina o valor (R$):</p>
+            <input type="number" id="deposit-amount-input" value="50" min="1" step="0.01">
+        </div>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>
