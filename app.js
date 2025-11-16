@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
-    
+
     // Novo: Elemento para exibir o erro de login
     const loginErrorDisplay = document.getElementById('loginErrorDisplay');
 
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveUsers(users) {
         localStorage.setItem('registeredUsers', JSON.stringify(users));
     }
-    
+
     // Exibe uma mensagem de erro na tela de login
     function displayLoginError(message) {
         loginErrorDisplay.textContent = message;
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            
+
             // Oculta erros anteriores
             if(loginErrorDisplay) loginErrorDisplay.style.display = 'none';
 
@@ -89,10 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (storedUser && storedUser.password === password) {
                 console.log(`Login Bem-Sucedido para: ${email}`);
                 
-                // Em uma aplicação real, você definiria um token de sessão aqui.
-                // Simulação de Sucesso: Redirecionar
-                console.log('Redirecionando...');
-                window.location.href = 'https://sandrobreaker.github.io/kaizouku-slot/'; 
+                // ### AJUSTE AQUI ### 
+                // Salva o e-mail do usuário logado para a próxima página ler
+                localStorage.setItem('currentUserEmail', email);
+
+                // Redireciona para o Lobby (home.html)
+                console.log('Redirecionando para o Lobby (home.html)...');
+                window.location.href = 'home.html'; 
 
             } else {
                 // Falha na autenticação (usuário não existe ou senha incorreta)
@@ -116,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = emailInput.value;
             const password = passwordInput.value;
             const confirmPassword = confirmPasswordInput.value;
-            
+
             let isValid = true;
 
             // 1. Validação de E-mail
@@ -146,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 confirmPasswordError.style.display = 'none';
             }
-            
+
             // 4. Verificação de usuário existente
             const users = loadUsers();
             if (users[email]) {
@@ -162,11 +165,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     referralCode: referralCode,
                     registeredAt: new Date().toISOString()
                 };
-                
+
                 saveUsers(users);
 
                 console.log(`Registro de ${email} BEM-SUCEDIDO e salvo no LocalStorage.`);
-                
+
                 // Limpa o formulário de registro e volta para o login
                 registerForm.reset();
                 showSection('login'); 
@@ -174,4 +177,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
