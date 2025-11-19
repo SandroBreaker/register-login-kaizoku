@@ -15,98 +15,94 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyPixBtn = document.getElementById('btn-copy-pix');
     const pixCodeInput = document.getElementById('pix-code-string');
 
-    // --- Constantes ---
-    const DEFAULT_DEPOSIT = 50.00; // Valor padrão definido
+    // --- Constantes e Templates ---
+    const DEFAULT_DEPOSIT = 50.00;
+
+    // [NOVO] Template HTML do Card do Jogo (O "Modal" da Home)
+    // Isso garante que temos a estrutura original salva na memória do JS.
+    const GAME_CARD_TEMPLATE = `
+        <section class="game-wallpaper">
+            <a href="https://sandrobreaker.github.io/kaizouku-slot/" class="btn-play">Jogar</a>
+        </section>
+    `;
 
     // ===================================
     // FUNÇÕES DE LÓGICA
     // ===================================
 
     /**
-     * [FUNÇÃO EXISTENTE]
+     * [NOVA FUNÇÃO CRÍTICA]
+     * Renderiza o Card do Jogo dinamicamente.
+     * Limpa a tela inicial e injeta o HTML novo para evitar que ele suma.
+     */
+    function renderHome() {
+        const homeScreen = document.getElementById('tela-inicio');
+        if (homeScreen) {
+            // 1. Limpa o conteúdo atual (Sanitize)
+            homeScreen.innerHTML = ''; 
+            // 2. Injeta o "Modal/Card" do zero (Re-hydrate)
+            homeScreen.innerHTML = GAME_CARD_TEMPLATE;
+        }
+    }
+
+    /**
      * Lê o usuário do localStorage e atualiza a UI.
      */
     function initializeUserData() {
         const userEmail = localStorage.getItem('currentUserEmail');
         
         if (!userEmail) {
-            // Fallback se não houver usuário (ex: abriu home.html direto)
             console.warn('Nenhum usuário logado. Usando dados padrão.');
-            // Os dados padrão (Nome do Player) já estão no HTML.
             return; 
         }
 
-        // UX: Converte o e-mail em um nome de exibição (ex: 'user@email.com' -> 'user')
         const displayName = userEmail.split('@')[0];
-
-        // Atualiza o header (usando o ID robusto)
         const headerName = document.getElementById('header-user-name');
-        if (headerName) {
-            headerName.textContent = displayName;
-        }
-
-        // Atualiza o perfil (usando o ID robusto)
+        if (headerName) headerName.textContent = displayName;
+        
         const profileName = document.getElementById('profile-user-name');
-        if (profileName) {
-            profileName.textContent = displayName;
-        }
+        if (profileName) profileName.textContent = displayName;
     }
 
-
     /**
-     * [FUNÇÃO EXISTENTE]
      * Centraliza a atualização do valor de depósito.
-     * Garante que Input e Display estejam sempre sincronizados.
-     * @param {string|number} amount - O valor a ser definido.
      */
     function updateDepositValue(amount) {
-        // Converte para número e formata
         let numericAmount = parseFloat(amount);
-        
-        // Proteção contra valores inválidos (NaN, null, < 0)
         if (isNaN(numericAmount) || numericAmount < 0) {
             numericAmount = DEFAULT_DEPOSIT;
         }
-        
         const formattedAmount = numericAmount.toFixed(2);
-        
-        // Atualiza ambos os elementos
         depositInput.value = formattedAmount;
-        depositDisplay.textContent = `R$ ${formattedAmount.replace('.', ',')}`; // Formato BR
+        depositDisplay.textContent = `R$ ${formattedAmount.replace('.', ',')}`;
     }
 
     /**
-     * [FUNÇÃO AJUSTADA - LÓGICA ZERO-BUG]
-     * Alterna a tela visível e atualiza o estado 'active' da navegação.
-     * Inclui a correção para fechar o modal (card do jogo/depósito) ao navegar.
-     * @param {string} targetId - O ID da tela a ser mostrada (ex: 'tela-inicio').
+     * [FUNÇÃO AJUSTADA]
+     * Alterna a tela visível e dispara a renderização da Home se necessário.
      */
     function switchScreen(targetId) {
-        // AJUSTE CRÍTICO (UX/CX): Fechar o modal ao mudar de tela garante que
-        // o overlay não persista e bloqueie interações em outras telas.
-        // Se a solicitação do usuário implica que o modal estava aberto na home,
-        // ele DEVE ser fechado ao navegar para outra tela.
-        if (depositModal && !depositModal.classList.contains('hidden')) {
-            toggleModal(false);
+        // 1. Gerenciamento de Estado: Se for para a Home, recria o card.
+        if (targetId === 'tela-inicio') {
+            renderHome(); // <--- A MÁGICA ACONTECE AQUI
         }
 
-        // 1. Esconde todas as telas
+        // 2. Esconde todas as telas
         screens.forEach(screen => {
             screen.classList.add('hidden');
             screen.classList.remove('active');
         });
 
-        // 2. Mostra a tela alvo
+        // 3. Mostra a tela alvo
         const targetScreen = document.getElementById(targetId);
         if (targetScreen) {
             targetScreen.classList.remove('hidden');
             targetScreen.classList.add('active');
         }
 
-        // 3. Atualiza o estado 'active' da navegação
+        // 4. Atualiza navegação
         navButtons.forEach(btn => {
-            // Compara o ID do botão (ex: 'nav-home') com o ID da tela (ex: 'tela-home')
-            const screenName = btn.id.split('-')[1]; // 'home', 'bonus', 'perfil'
+            const screenName = btn.id.split('-')[1];
             if (targetId.includes(screenName)) {
                 btn.classList.add('active');
             } else {
@@ -116,13 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * [FUNÇÃO EXISTENTE]
-     * Gerencia a visibilidade do modal.
-     * @param {boolean} show - True para mostrar, false para esconder.
+     * Gerencia a visibilidade do modal de depósito.
      */
     function toggleModal(show) {
         if (show) {
-            // UX: Ao abrir, garante que o valor exibido está sincronizado com o input
             updateDepositValue(depositInput.value); 
             depositModal.classList.remove('hidden');
         } else {
@@ -131,26 +124,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * [FUNÇÃO EXISTENTE]
-     * Copia o código PIX para a área de transferência com feedback de UX.
+     * Copia o código PIX.
      */
     async function copyPixCode() {
         try {
             await navigator.clipboard.writeText(pixCodeInput.value);
-            copyPixBtn.textContent = 'Copiado!'; // Feedback UX
-            
-            // Usando variáveis de cor do tema
-            copyPixBtn.style.backgroundColor = '#28a745'; // Sucesso (verde)
-
+            copyPixBtn.textContent = 'Copiado!'; 
+            copyPixBtn.style.backgroundColor = '#28a745'; 
             setTimeout(() => {
                 copyPixBtn.textContent = 'Copiar Código';
-                // Lógica Zero-Bug: Usar 'var(--accent)' é mais robusto
                 copyPixBtn.style.backgroundColor = 'var(--accent)'; 
             }, 2000);
         } catch (err) {
             console.error('Falha ao copiar:', err);
-            copyPixBtn.textContent = 'Falhou!'; // Feedback UX
-            // Lógica Zero-Bug: Usar 'var(--luffy)' é mais robusto
+            copyPixBtn.textContent = 'Falhou!';
             copyPixBtn.style.backgroundColor = 'var(--luffy)'; 
         }
     }
@@ -162,45 +149,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Navegação Principal
     navButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            const screenName = e.currentTarget.id.split('-')[1]; // 'home', 'bonus', 'perfil'
+            const screenName = e.currentTarget.id.split('-')[1]; 
             switchScreen(`tela-${screenName}`);
         });
     });
 
     // 2. Modal de Depósito
-    if (openModalBtn) {
-        openModalBtn.addEventListener('click', () => toggleModal(true));
-    }
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => toggleModal(false));
-    }
+    if (openModalBtn) openModalBtn.addEventListener('click', () => toggleModal(true));
+    if (closeModalBtn) closeModalBtn.addEventListener('click', () => toggleModal(false));
     
-    // UX: Clicar fora do modal (no overlay) também fecha
     depositModal.addEventListener('click', (e) => {
-        if (e.target === depositModal) { // Verifica se o clique foi no overlay
-            toggleModal(false);
-        }
+        if (e.target === depositModal) toggleModal(false);
     });
 
     // 3. Lógica de Valores de Depósito
-    
-    // Atualiza o display quando o usuário digita no input
     depositInput.addEventListener('input', (e) => {
-        // Apenas atualiza o display; o valor real é formatado no 'blur' (ao sair)
         let value = e.target.value.replace(',', '.');
         depositDisplay.textContent = `R$ ${value || '0,00'}`;
     });
 
-    // Garante a formatação correta quando o usuário sai do input
     depositInput.addEventListener('blur', (e) => {
         updateDepositValue(e.target.value);
     });
 
-    // Atualiza input/display ao clicar nos botões de preset
     presetButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            const value = btn.dataset.value; // Pega o valor do 'data-value'
-            updateDepositValue(value);
+            updateDepositValue(btn.dataset.value);
         });
     });
 
@@ -208,8 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
     copyPixBtn.addEventListener('click', copyPixCode);
 
     // 5. Estado Inicial
-    initializeUserData(); // Carrega dados do usuário
-    updateDepositValue(DEFAULT_DEPOSIT); // Define o valor padrão no carregamento
-    switchScreen('tela-inicio'); // Garante que a tela 'Início' é a primeira a ser vista
+    initializeUserData(); 
+    updateDepositValue(DEFAULT_DEPOSIT);
+    
+    // INICIALIZAÇÃO FORÇADA: Renderiza a home na primeira carga também
+    renderHome(); 
+    switchScreen('tela-inicio'); 
 
 });
