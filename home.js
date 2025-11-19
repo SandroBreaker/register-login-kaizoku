@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===================================
 
     /**
-     * [NOVA FUNÇÃO]
+     * [FUNÇÃO EXISTENTE]
      * Lê o usuário do localStorage e atualiza a UI.
      */
     function initializeUserData() {
@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /**
+     * [FUNÇÃO EXISTENTE]
      * Centraliza a atualização do valor de depósito.
      * Garante que Input e Display estejam sempre sincronizados.
      * @param {string|number} amount - O valor a ser definido.
@@ -75,10 +76,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * [FUNÇÃO AJUSTADA - LÓGICA ZERO-BUG]
      * Alterna a tela visível e atualiza o estado 'active' da navegação.
+     * Inclui a correção para fechar o modal (card do jogo/depósito) ao navegar.
      * @param {string} targetId - O ID da tela a ser mostrada (ex: 'tela-inicio').
      */
     function switchScreen(targetId) {
+        // AJUSTE CRÍTICO (UX/CX): Fechar o modal ao mudar de tela garante que
+        // o overlay não persista e bloqueie interações em outras telas.
+        // Se a solicitação do usuário implica que o modal estava aberto na home,
+        // ele DEVE ser fechado ao navegar para outra tela.
+        if (depositModal && !depositModal.classList.contains('hidden')) {
+            toggleModal(false);
+        }
+
         // 1. Esconde todas as telas
         screens.forEach(screen => {
             screen.classList.add('hidden');
@@ -105,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * [FUNÇÃO EXISTENTE]
      * Gerencia a visibilidade do modal.
      * @param {boolean} show - True para mostrar, false para esconder.
      */
@@ -119,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * [FUNÇÃO EXISTENTE]
      * Copia o código PIX para a área de transferência com feedback de UX.
      */
     async function copyPixCode() {
@@ -131,12 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 copyPixBtn.textContent = 'Copiar Código';
-                copyPixBtn.style.backgroundColor = 'var(--accent)'; // Cor original (laranja)
+                // Lógica Zero-Bug: Usar 'var(--accent)' é mais robusto
+                copyPixBtn.style.backgroundColor = 'var(--accent)'; 
             }, 2000);
         } catch (err) {
             console.error('Falha ao copiar:', err);
             copyPixBtn.textContent = 'Falhou!'; // Feedback UX
-            copyPixBtn.style.backgroundColor = 'var(--luffy)'; // Cor de erro (vermelho)
+            // Lógica Zero-Bug: Usar 'var(--luffy)' é mais robusto
+            copyPixBtn.style.backgroundColor = 'var(--luffy)'; 
         }
     }
 
@@ -193,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     copyPixBtn.addEventListener('click', copyPixCode);
 
     // 5. Estado Inicial
-    initializeUserData(); // <-- AJUSTE AQUI: Carrega dados do usuário
+    initializeUserData(); // Carrega dados do usuário
     updateDepositValue(DEFAULT_DEPOSIT); // Define o valor padrão no carregamento
     switchScreen('tela-inicio'); // Garante que a tela 'Início' é a primeira a ser vista
 
